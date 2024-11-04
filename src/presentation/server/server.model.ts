@@ -8,6 +8,7 @@ import express, { Application } from "express";
 import { LoggerClient } from "src/presentation/logger";
 import { SwaggerConfig, SwaggerOptions } from "src/presentation/documentation";
 import { DatasourceInterface, DatabaseManager } from "src/presentation/database";
+import { CompanyControlPlane } from "src/core";
 
 export class Server {
     private readonly _port: number;
@@ -35,6 +36,7 @@ export class Server {
     }
 
     private _routes(): void {
+        new CompanyControlPlane(this._app);
         new ExceptionMiddlewareApiAdapter(this._app);
     }
 

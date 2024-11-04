@@ -3,7 +3,9 @@ import { Application, NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODE_ENUM, ResponseStatus } from "src/core/shared";
 
 export class ExceptionMiddlewareApiAdapter implements MiddlewarePort {
-    constructor(private readonly _app: Application) {}
+    constructor(private readonly _app: Application) {
+        console.log("OK!!!!");
+    }
 
     public intercept(
         request: Request,
