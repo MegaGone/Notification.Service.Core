@@ -2,12 +2,8 @@ import { MiddlewarePort } from "src/presentation/driver/port";
 import { Application, NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODE_ENUM, ResponseStatus } from "src/core/shared";
 
-export class ExceptionMiddlewareApiAdapter implements MiddlewarePort {
-    constructor(private readonly _app: Application) {
-        console.log("OK!!!!");
-    }
-
-    public intercept(
+export const ExceptionMiddlewareApiAdapter: MiddlewarePort = {
+    intercept(
         request: Request,
         response: Response,
         next: NextFunction,
@@ -19,5 +15,5 @@ export class ExceptionMiddlewareApiAdapter implements MiddlewarePort {
         const { statusCode, message } = exception;
         response.status(statusCode).send({ statusCode, message });
         next();
-    }
-}
+    },
+};

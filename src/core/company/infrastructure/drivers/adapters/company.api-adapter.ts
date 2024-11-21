@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, Application } from "express";
 import { RouterPort } from "src/core/shared/infrastructure";
 import { CompanyApiPort } from "src/core/company/infrastructure";
+import { HTTP_STATUS_CODE_ENUM, ResponseStatus } from "src/core";
 
 export class CompanyApiAdapter extends RouterPort implements CompanyApiPort {
     private readonly _route: string;
@@ -15,6 +16,9 @@ export class CompanyApiAdapter extends RouterPort implements CompanyApiPort {
 
     public async register(req: Request, res: Response, next: NextFunction) {
         try {
+            const { password } = req.body;
+            if (!password) throw new ResponseStatus(HTTP_STATUS_CODE_ENUM.BAD_REQUEST, "test");
+
             res.status(200).json({ ok: true });
         } catch (error) {
             next(error);

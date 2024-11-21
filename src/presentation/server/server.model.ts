@@ -4,11 +4,11 @@ import {
     BodyParseMiddlewareApiAdapter,
     ExceptionMiddlewareApiAdapter,
 } from "src/presentation/driver/adapter";
-import express, { Application } from "express";
 import { LoggerClient } from "src/presentation/logger";
+import { CompanyControlPlane, ResponseStatus } from "src/core";
 import { SwaggerConfig, SwaggerOptions } from "src/presentation/documentation";
+import express, { Application, Request, Response, NextFunction } from "express";
 import { DatasourceInterface, DatabaseManager } from "src/presentation/database";
-import { CompanyControlPlane } from "src/core";
 
 export class Server {
     private readonly _port: number;
@@ -37,11 +37,17 @@ export class Server {
 
     private _routes(): void {
         new CompanyControlPlane(this._app);
-        new ExceptionMiddlewareApiAdapter(this._app);
+        this._handlers();
     }
 
     private _documentation(): void {
         this._app.use("/api/docs", this._docs.serve(), this._docs.setup());
+    }
+
+    private _handlers() {
+        this._app.use((error: ResponseStatus, req: Request, res: Response, next: NextFunction) => {
+            ExceptionMiddlewareApiAdapter.intercept(req, res, next, error);
+        });
     }
 
     private async _database(): Promise<void> {
