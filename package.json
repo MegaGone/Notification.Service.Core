@@ -1,0 +1,49 @@
+{
+  "name": "notification.service.core",
+  "version": "1.0.0",
+  "description": "Service to send notification applying clean architecture.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack/production.configuration.js",
+    "dev": "webpack --watch --config webpack/development.configuration.js"
+  },
+  "keywords": [
+    "Node20",
+    "NodeJS",
+    "Typescript",
+    "Notification",
+    "Clean Architecture"
+  ],
+  "author": "J. Martinez",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
+    "acorn": "^8.14.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "ignore-loader": "^0.1.2",
+    "nodemon": "^3.1.9",
+    "nodemon-webpack-plugin": "^4.8.2",
+    "prettier": "^3.4.2",
+    "terser-webpack-plugin": "^5.3.11",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
