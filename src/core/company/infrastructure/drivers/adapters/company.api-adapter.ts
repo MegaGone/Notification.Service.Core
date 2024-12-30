@@ -17,7 +17,7 @@ export class CompanyApiAdapter extends RouterPort implements CompanyApiPort {
     public async register(req: Request, res: Response, next: NextFunction) {
         try {
             const { password } = req.body;
-            if (!password) throw new ResponseStatus(HTTP_STATUS_CODE_ENUM.BAD_REQUEST, "test");
+            if (!password) throw ResponseStatus.BadRequest("test");
 
             res.status(200).json({ ok: true });
         } catch (error) {
