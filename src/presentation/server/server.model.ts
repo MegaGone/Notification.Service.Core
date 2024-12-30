@@ -23,10 +23,10 @@ export class Server {
         this._databaseManager = new DatabaseManager();
         this._docs = new SwaggerConfig(SwaggerOptions);
 
+        this._database();
         this._middlewares();
         this._documentation();
         this._routes();
-        this._database();
     }
 
     private _middlewares(): void {
