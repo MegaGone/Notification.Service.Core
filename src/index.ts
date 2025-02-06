@@ -1,5 +1,6 @@
 import { PORT } from "src/config/global.configuration";
 import { Server } from "src/frameworks/webserver/server.model";
+import { MainRoutes } from "./frameworks/webserver/routes";
 
 (() => {
   bootstrap();
@@ -8,5 +9,6 @@ import { Server } from "src/frameworks/webserver/server.model";
 async function bootstrap() {
   new Server({
     port: +PORT,
+    routes: MainRoutes.routes,
   }).start();
 }
