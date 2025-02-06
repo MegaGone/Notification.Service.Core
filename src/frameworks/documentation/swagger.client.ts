@@ -2,14 +2,14 @@ import swaggerJSDoc from "swagger-jsdoc";
 import SwaggerUI from "swagger-ui-express";
 
 export class SwaggerClient {
-  private _specs: object;
+  private specs: object;
 
   constructor(options: object) {
-    this._specs = swaggerJSDoc(options);
+    this.specs = swaggerJSDoc(options);
   }
 
   public setup() {
-    return SwaggerUI.setup(this._specs);
+    return SwaggerUI.setup(this.specs);
   }
 
   public serve() {

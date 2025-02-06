@@ -1,7 +1,7 @@
 {
   "name": "notification.service.core",
   "version": "1.0.0",
-  "description": "Service to send notification applying clean architecture.",
+  "description": "API Service to send notifications.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack/production.configuration.js",

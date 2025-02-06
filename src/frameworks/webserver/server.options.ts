@@ -1,3 +1,3 @@
 export interface ServerOptions {
-  port: string;
+  port: number;
 }

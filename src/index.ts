@@ -1,12 +1,12 @@
-import { PORT } from "src/configuration";
-import { Server } from "src/presentation/server";
+import { PORT } from "src/config/global.configuration";
+import { Server } from "src/frameworks/webserver/server.model";
 
 (() => {
-  main();
+  bootstrap();
 })();
 
-async function main(): Promise<void> {
+async function bootstrap() {
   new Server({
-    port: PORT,
+    port: +PORT,
   }).start();
 }

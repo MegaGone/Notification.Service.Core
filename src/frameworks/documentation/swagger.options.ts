@@ -1,16 +1,15 @@
-import { version } from "package.json";
+import { version, description } from "package.json";
 
 export const SwaggerOptions = {
   definition: {
     openapi: "3.0.3",
     info: {
-      title: "Notification.Service.Core",
       version: version,
-      description: "API Rest to handle notification service.",
+      description: description,
+      title: "Notification.Service.Core",
     },
     servers: [],
     components: {
-      securitySchemes: {},
       schemas: {},
       responses: {},
     },
