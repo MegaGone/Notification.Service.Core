@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 20",
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "_version": "2.0.0",
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "baseUrl": "./",
+    "target": "es2022",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true
+  },
+  "paths": {
+    "@/*": ["*"],
+    "@domain/*": ["domain/*"],
+    "@application/*": ["application/*"],
+    "@presentation/*": ["presentation/*"],
+    "@infrastructure/*": ["infrastructure/*"]
+  }
+}

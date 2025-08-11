@@ -1,0 +1,62 @@
+{
+  "name": "Notification.Core",
+  "version": "1.0.0",
+  "description": "API Service to send notifications.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack/production.configuration.js",
+    "dev": "webpack --watch --config webpack/development.configuration.js"
+  },
+  "keywords": [
+    "Node20",
+    "NodeJS",
+    "Typescript",
+    "Notification",
+    "Clean Architecture"
+  ],
+  "author": "J. Martinez",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.1.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "ignore-loader": "^0.1.2",
+    "nodemon": "^3.1.10",
+    "nodemon-webpack-plugin": "^4.8.2",
+    "prettier": "^3.6.2",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "typescript": "^5.8.3",
+    "webpack": "^5.100.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@datalust/winston-seq": "2.0.0",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-validator": "6.14.2",
+    "mongoose": "^8.16.5",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "openapi-types": "^12.1.3",
+    "reflect-metadata": "^0.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.25",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0"
+  }
+}
