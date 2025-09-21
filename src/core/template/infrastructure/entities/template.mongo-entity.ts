@@ -22,7 +22,6 @@ MongoTemplateSchema.index({ enabled: 1 });
 MongoTemplateSchema.index({ templateId: 1 });
 MongoTemplateSchema.index({ createdAt: -1 });
 MongoTemplateSchema.index({ description: 1 });
-MongoTemplateSchema.index({ identificator: 1 });
 
 MongoTemplateSchema.methods.toJSON = function () {
   const { __v, _id, ...template } = this.toObject();
