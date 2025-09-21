@@ -42,7 +42,7 @@ export class MServer {
   }
 
   private initRoutes(): void {
-    this._app.use(this._router);
+    this._app.use(this._apiVersion, this._router);
     new ExceptionMiddleware(this._app).register();
   }
 

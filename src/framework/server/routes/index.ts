@@ -5,7 +5,7 @@ export class MainRouter {
   public static routes(): Router {
     const router = Router();
 
-    router.use("/api/template", TemplateRouter.routes());
+    router.use("/template", TemplateRouter.routes());
 
     return router;
   }
