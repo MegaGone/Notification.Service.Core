@@ -12,8 +12,8 @@ export class DisableTemplateUseCase {
   ) {}
 
   public async execute(dto: DisableTemplateDto): Promise<DisableTemplateResponseDto> {
-    const record = await this._templateRepository.findByDescription(dto.id);
-    if (!record) throw new TemplateNotFoundException(dto.id);
+    const record = await this._templateRepository.findByIdentificator(dto.identificator);
+    if (!record) throw new TemplateNotFoundException(dto.identificator);
 
     const template = record?.toPrimitive();
 

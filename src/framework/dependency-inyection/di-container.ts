@@ -9,6 +9,7 @@ import { FileSystemService } from "../../core/shared/infrastructure/services/fil
 
 // USE CASES
 import { StoreTemplateUseCase } from "../../core/template/application/store-template/store-template.use-case";
+import { FindTemplateByIdentificatorUseCase } from "src/core/template/application/find-template-by-identificator";
 import { DisableTemplateUseCase } from "../../core/template/application/disable-template/disable-template.use-case";
 
 // PROVIDERS
@@ -39,6 +40,7 @@ export class DIContainer {
   // Use Cases
   private _storeTemplateUseCase!: StoreTemplateUseCase;
   private _disableTemplateUseCase!: DisableTemplateUseCase;
+  private _findTemplateByIdentificatorUseCase!: FindTemplateByIdentificatorUseCase;
 
   private constructor() {
     this.initLogger();
@@ -94,6 +96,10 @@ export class DIContainer {
       this._uploadProvider,
       this._templateRepository,
     );
+
+    this._findTemplateByIdentificatorUseCase = new FindTemplateByIdentificatorUseCase(
+      this._templateRepository,
+    );
   }
 
   // Getters for services
@@ -118,5 +124,9 @@ export class DIContainer {
 
   public get disableTemplateUseCase(): DisableTemplateUseCase {
     return this._disableTemplateUseCase;
+  }
+
+  public get findTemplateByIdentificatorUseCase(): FindTemplateByIdentificatorUseCase {
+    return this._findTemplateByIdentificatorUseCase;
   }
 }

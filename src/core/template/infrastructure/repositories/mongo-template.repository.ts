@@ -31,8 +31,8 @@ export class MongoTemplateRepository implements TemplateRepository {
 
   public async disable(identificator: string): Promise<boolean> {
     try {
-      const wasDisabled = await this._model.findByIdAndUpdate(
-        identificator,
+      const wasDisabled = await this._model.findOneAndUpdate(
+        { identificator },
         { enabled: false },
         { new: true },
       );
@@ -50,6 +50,16 @@ export class MongoTemplateRepository implements TemplateRepository {
       return record ? this._toDomain(record) : null;
     } catch (error) {
       console.log(`[ERROR][MONGO][TEMPLATE][FIND_BY_DESCRIPTION] ${JSON.stringify(error)}`);
+      return null;
+    }
+  }
+
+  public async findByIdentificator(identificator: string): Promise<TemplateEntity | null> {
+    try {
+      const record = await this._model.findOne({ identificator });
+      return record ? this._toDomain(record) : null;
+    } catch (error) {
+      console.log(`[ERROR][MONGO][TEMPLATE][FIND_BY_IDENTIFICATOR] ${JSON.stringify(error)}`);
       return null;
     }
   }

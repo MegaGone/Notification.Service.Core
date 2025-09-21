@@ -12,6 +12,6 @@ export abstract class TemplateRepository {
   // ): Promise<{ count: number; records: Array<TemplateEntity> }>;
   public abstract disable(identificator: string): Promise<boolean>;
   public abstract store(template: TemplateEntity): Promise<TemplateEntity>;
-  // public abstract findById(identificator: string): Promise<TemplateEntity | null>;
   public abstract findByDescription(description: string): Promise<TemplateEntity | null>;
+  public abstract findByIdentificator(identificator: string): Promise<TemplateEntity | null>;
 }

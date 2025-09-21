@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import { ResponseStatus } from "src/core/shared/domain/entities/response-status.model";
 import { StoreTemplateUseCase } from "../application/store-template/store-template.use-case";
 import { DisableTemplateUseCase } from "../application/disable-template/disable-template.use-case";
+import { FindTemplateByIdentificatorUseCase } from "../application/find-template-by-identificator";
 
 export class TemplateController {
   constructor(
     private readonly _storeTemplateUseCase: StoreTemplateUseCase,
     private readonly _disableTemplateUseCase: DisableTemplateUseCase,
+    private readonly _findTemplateByIdentificatorUseCase: FindTemplateByIdentificatorUseCase,
   ) {}
 
   public storeTemplate = (req: Request, res: Response) => {
@@ -25,11 +27,20 @@ export class TemplateController {
       .catch((error: ResponseStatus) => res.status(error?.statusCode).json(error));
   };
 
+  public findTemplateByIdentificator = (req: Request, res: Response) => {
+    const { identificator } = req.params;
+
+    this._findTemplateByIdentificatorUseCase
+      .execute({ identificator })
+      .then((result) => res.json(result))
+      .catch((error: ResponseStatus) => res.status(error?.statusCode).json(error));
+  };
+
   public disableTemplate = (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { identificator } = req.params;
 
     this._disableTemplateUseCase
-      .execute({ id })
+      .execute({ identificator })
       .then((result) => res.json(result))
       .catch((error: ResponseStatus) => res.status(error?.statusCode).json(error));
   };

@@ -1,5 +1,5 @@
 export interface DisableTemplateDto {
-  id: string;
+  identificator: string;
 }
 
 export interface DisableTemplateResponseDto {

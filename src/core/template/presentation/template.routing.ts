@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { TemplateController } from "./template.controller";
+import { validateFields } from "src/framework/server/middlewares";
+import { StoreTemplateDto } from "./validators/store-template.dto";
+import { DisableTemplateDto } from "./validators/disable-template.dto";
 import { single } from "src/framework/server/middlewares/multer.middleware";
 import { DIContainer } from "../../../framework/dependency-inyection/di-container";
-import { StoreTemplateDto } from "./validators/store-template.dto";
-import { validateFields } from "src/framework/server/middlewares";
+import { FindTemplateByIdentificatorDto } from "./validators/find-template-by-identificator.dto";
 
 export class TemplateRouter {
   public static routes(): Router {
@@ -13,6 +15,7 @@ export class TemplateRouter {
     const templateController = new TemplateController(
       container.storeTemplateUseCase,
       container.disableTemplateUseCase,
+      container.findTemplateByIdentificatorUseCase,
     );
 
     router.post(
@@ -23,8 +26,19 @@ export class TemplateRouter {
       templateController.storeTemplate,
     );
 
-    // DELETE /templates/:id - Desactivar un template por ID
-    router.delete("/:id", templateController.disableTemplate);
+    router.get(
+      "/:identificator",
+      FindTemplateByIdentificatorDto(),
+      validateFields,
+      templateController.findTemplateByIdentificator,
+    );
+
+    router.delete(
+      "/:identificator",
+      DisableTemplateDto(),
+      validateFields,
+      templateController.disableTemplate,
+    );
 
     return router;
   }
