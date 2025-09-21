@@ -1,7 +1,7 @@
 import { IMiddleware } from "./implementation";
 import { Application, Request, Response, NextFunction } from "express";
-import { ResponseStatus } from "src/core/shared/domain/response-status.model";
-import { HTTP_STATUS_CODE_ENUM } from "src/core/shared/domain/status-code.enum";
+import { ResponseStatus } from "src/core/shared/domain/entities/response-status.model";
+import { HTTP_STATUS_CODE_ENUM } from "src/core/shared/domain/entities/status-code.enum";
 
 export class ExceptionMiddleware implements IMiddleware {
   constructor(private readonly _app: Application) {}

@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from "openapi-types";
-import { HTTP_STATUS_CODE_ENUM } from "src/core/shared/domain/status-code.enum";
+import { HTTP_STATUS_CODE_ENUM } from "src/core/shared/domain/entities/status-code.enum";
 
 export const UnauthorizedException: OpenAPIV3.ResponseObject = {
   description: "Unauthorize",

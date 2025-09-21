@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { MainRouter } from "./framework/server/routes";
 import { MServer } from "./framework/server/server.model";
 import { API_VERSION, PORT } from "src/configuration/global.configuration";
 
@@ -9,7 +9,7 @@ import { API_VERSION, PORT } from "src/configuration/global.configuration";
 async function bootstrap() {
   new MServer({
     port: +PORT,
-    routes: Router(),
+    routes: MainRouter.routes(),
     apiVersion: API_VERSION,
   }).start();
 }

@@ -1,0 +1,6 @@
+export const STATUS_ENUM = {
+  ENABLED: 1,
+  DISABLED: 0,
+};
+
+export const STATUS_ENUM_ARRAY = [STATUS_ENUM.ENABLED, STATUS_ENUM.DISABLED];

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ResponseStatus } from "src/core/shared/domain/response-status.model";
+import { ResponseStatus } from "src/core/shared/domain/entities/response-status.model";
 
 export interface IMiddleware {
   intercept(
