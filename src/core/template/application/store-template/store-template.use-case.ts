@@ -26,8 +26,8 @@ export class StoreTemplateUseCase {
     );
 
     return {
-      stored: !!template?.toPrimitive()?.id,
-      id: template?.toPrimitive()?.id || "",
+      stored: !!template?.toPrimitive()?.identificator,
+      id: template?.toPrimitive()?.identificator || "",
     };
   }
 }

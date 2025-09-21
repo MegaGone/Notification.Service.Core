@@ -65,6 +65,7 @@ export class MongoTemplateRepository implements TemplateRepository {
       updatedAt: template?.updatedAt,
       templateId: template?.templateId,
       description: template?.description,
+      identificator: template?.identificator,
     });
   }
 }
