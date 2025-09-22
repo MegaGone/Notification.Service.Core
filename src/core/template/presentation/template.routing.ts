@@ -6,6 +6,7 @@ import { DisableTemplateDto } from "./validators/disable-template.dto";
 import { single } from "src/framework/server/middlewares/multer.middleware";
 import { DIContainer } from "../../../framework/dependency-inyection/di-container";
 import { ScopeMiddleware } from "src/framework/server/middlewares/scope.middeware";
+import { FindTemplatesPaginatedDto } from "./validators/find-templates-paginated.dto";
 import { FindTemplateByIdentificatorDto } from "./validators/find-template-by-identificator.dto";
 import { AuthorizationMiddleware } from "src/framework/server/middlewares/authorization.middleware";
 
@@ -20,6 +21,7 @@ export class TemplateRouter {
     const templateController = new TemplateController(
       container.storeTemplateUseCase,
       container.disableTemplateUseCase,
+      container.findTemplatesPaginatedUseCase,
       container.findTemplateByIdentificatorUseCase,
     );
 
@@ -29,6 +31,13 @@ export class TemplateRouter {
       StoreTemplateDto(),
       validateFields,
       templateController.storeTemplate,
+    );
+
+    router.get(
+      "/paginated",
+      FindTemplatesPaginatedDto(),
+      validateFields,
+      templateController.findTemplatesPaginated,
     );
 
     router.get(

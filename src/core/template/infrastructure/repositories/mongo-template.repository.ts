@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import { TemplateEntity } from "../../domain/entities/template.entity";
 import { MongoTemplateInterface } from "../entities/template.interface";
 import { TemplateRepository } from "../../domain/repositories/template.repository";
@@ -61,6 +61,30 @@ export class MongoTemplateRepository implements TemplateRepository {
     } catch (error) {
       console.log(`[ERROR][MONGO][TEMPLATE][FIND_BY_IDENTIFICATOR] ${JSON.stringify(error)}`);
       return null;
+    }
+  }
+
+  public async findPaginated(
+    page: number,
+    pageSize: number,
+    enabled?: boolean,
+  ): Promise<{ count: number; records: Array<TemplateEntity> }> {
+    try {
+      const take = Math.max(1, pageSize);
+      const skip = Math.max(0, (page - 1) * take);
+      const filter: FilterQuery<MongoTemplateInterface> = {};
+
+      if (enabled) filter.enabled = enabled;
+
+      const [count, records] = await Promise.all([
+        this._model.countDocuments(filter),
+        this._model.find(filter).select("-templateId").limit(take).skip(skip).exec(),
+      ]);
+
+      return { count, records: records?.map((record) => this._toDomain(record)) || [] };
+    } catch (error) {
+      console.log(`[ERROR][MONGO][TEMPLATE][FIND_PAGINATED] ${JSON.stringify(error)}`);
+      return { count: 0, records: [] };
     }
   }
 

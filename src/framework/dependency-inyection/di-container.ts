@@ -8,6 +8,7 @@ import { DatasourceInterface } from "../database/datasource/datasource.interface
 import { FileSystemService } from "../../core/shared/infrastructure/services/file-system.service";
 
 // USE CASES
+import { FindTemplatesPaginatedUseCase } from "../../core/template/application/find-templates-paginated";
 import { StoreTemplateUseCase } from "../../core/template/application/store-template/store-template.use-case";
 import { FindTemplateByIdentificatorUseCase } from "src/core/template/application/find-template-by-identificator";
 import { DisableTemplateUseCase } from "../../core/template/application/disable-template/disable-template.use-case";
@@ -40,6 +41,7 @@ export class DIContainer {
   // Use Cases
   private _storeTemplateUseCase!: StoreTemplateUseCase;
   private _disableTemplateUseCase!: DisableTemplateUseCase;
+  private _findTemplatesPaginatedUseCase!: FindTemplatesPaginatedUseCase;
   private _findTemplateByIdentificatorUseCase!: FindTemplateByIdentificatorUseCase;
 
   private constructor() {
@@ -97,6 +99,10 @@ export class DIContainer {
       this._templateRepository,
     );
 
+    this._findTemplatesPaginatedUseCase = new FindTemplatesPaginatedUseCase(
+      this._templateRepository,
+    );
+
     this._findTemplateByIdentificatorUseCase = new FindTemplateByIdentificatorUseCase(
       this._templateRepository,
     );
@@ -124,6 +130,10 @@ export class DIContainer {
 
   public get disableTemplateUseCase(): DisableTemplateUseCase {
     return this._disableTemplateUseCase;
+  }
+
+  public get findTemplatesPaginatedUseCase(): FindTemplatesPaginatedUseCase {
+    return this._findTemplatesPaginatedUseCase;
   }
 
   public get findTemplateByIdentificatorUseCase(): FindTemplateByIdentificatorUseCase {
