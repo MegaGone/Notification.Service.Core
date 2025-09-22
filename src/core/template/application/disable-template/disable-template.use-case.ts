@@ -22,7 +22,7 @@ export class DisableTemplateUseCase {
     const wasDeletedRemoteTemplate = await this._uploadProvider.deleteById(template?.templateId);
     if (!wasDeletedRemoteTemplate) throw new UploadFileException();
 
-    const wasDisabled = await this._templateRepository.disable(template?.templateId);
+    const wasDisabled = await this._templateRepository.disable(template?.identificator);
     return { disabled: wasDisabled };
   }
 }

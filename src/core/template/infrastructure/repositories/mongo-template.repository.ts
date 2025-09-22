@@ -32,9 +32,15 @@ export class MongoTemplateRepository implements TemplateRepository {
   public async disable(identificator: string): Promise<boolean> {
     try {
       const wasDisabled = await this._model.findOneAndUpdate(
-        { identificator },
-        { enabled: false },
-        { new: true },
+        {
+          identificator: identificator,
+        },
+        {
+          enabled: false,
+        },
+        {
+          new: true,
+        },
       );
 
       return wasDisabled ? true : false;

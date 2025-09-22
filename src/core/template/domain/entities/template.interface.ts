@@ -8,5 +8,5 @@ export interface PrimitiveTemplate {
   templateId: string;
   description: string;
   fields: Array<string>;
-  identificator?: string;
+  identificator: string;
 }
