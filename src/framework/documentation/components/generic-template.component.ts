@@ -4,7 +4,7 @@ export const GenericTemplate: OpenAPIV3.SchemaObject = {
   type: "object",
   properties: {
     id: { type: "string", example: "680300e23a5e28cfb8708ce0" },
-    from: { type: "string", example: "devops@sbxsoft.com" },
+    sender: { type: "string", example: "devops@sbxsoft.com" },
     fields: {
       type: "array",
       items: { type: "string" },

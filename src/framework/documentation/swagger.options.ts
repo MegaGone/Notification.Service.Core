@@ -1,5 +1,6 @@
 import { GenericTemplate } from "./components";
 import {
+  ScopeSchema,
   FieldException,
   InternalException,
   UnauthorizedException,
@@ -19,6 +20,7 @@ export const SwaggerOptions = {
     servers: [],
     components: {
       securitySchemes: {
+        ScopeSchema,
         AuthorizationBearerSchema,
       },
       schemas: {
