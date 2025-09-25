@@ -2,10 +2,10 @@ import { TemplateEntity } from "../entities/template.entity";
 import { PrimitiveTemplate } from "../entities/template.interface";
 
 export abstract class TemplateRepository {
-  // public abstract update(
-  //   identificator: string,
-  //   template: Partial<PrimitiveTemplate>,
-  // ): Promise<boolean>;
+  public abstract update(
+    identificator: string,
+    template: Partial<PrimitiveTemplate>,
+  ): Promise<boolean>;
   public abstract findPaginated(
     page: number,
     pageSize: number,

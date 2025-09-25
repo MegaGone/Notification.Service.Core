@@ -1,13 +1,16 @@
+import {
+  StoreTemplateDto,
+  UpdateTemplateDto,
+  DisableTemplateDto,
+  FindTemplatesPaginatedDto,
+  FindTemplateByIdentificatorDto,
+} from "./validators";
 import { Router } from "express";
 import { TemplateController } from "./template.controller";
 import { validateFields } from "src/framework/server/middlewares";
-import { StoreTemplateDto } from "./validators/store-template.dto";
-import { DisableTemplateDto } from "./validators/disable-template.dto";
 import { single } from "src/framework/server/middlewares/multer.middleware";
 import { DIContainer } from "../../../framework/dependency-inyection/di-container";
 import { ScopeMiddleware } from "src/framework/server/middlewares/scope.middeware";
-import { FindTemplatesPaginatedDto } from "./validators/find-templates-paginated.dto";
-import { FindTemplateByIdentificatorDto } from "./validators/find-template-by-identificator.dto";
 import { AuthorizationMiddleware } from "src/framework/server/middlewares/authorization.middleware";
 
 export class TemplateRouter {
@@ -20,6 +23,7 @@ export class TemplateRouter {
 
     const templateController = new TemplateController(
       container.storeTemplateUseCase,
+      container.updateTemplateUseCase,
       container.disableTemplateUseCase,
       container.findTemplatesPaginatedUseCase,
       container.findTemplateByIdentificatorUseCase,
@@ -52,6 +56,14 @@ export class TemplateRouter {
       DisableTemplateDto(),
       validateFields,
       templateController.disableTemplate,
+    );
+
+    router.put(
+      "/update",
+      single,
+      UpdateTemplateDto(),
+      validateFields,
+      templateController.updateTemplate,
     );
 
     return router;

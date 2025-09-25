@@ -8,6 +8,7 @@ import { DatasourceInterface } from "../database/datasource/datasource.interface
 import { FileSystemService } from "../../core/shared/infrastructure/services/file-system.service";
 
 // USE CASES
+import { UpdateTemplateUseCase } from "src/core/template/application/update-template";
 import { FindTemplatesPaginatedUseCase } from "../../core/template/application/find-templates-paginated";
 import { StoreTemplateUseCase } from "../../core/template/application/store-template/store-template.use-case";
 import { FindTemplateByIdentificatorUseCase } from "src/core/template/application/find-template-by-identificator";
@@ -40,6 +41,7 @@ export class DIContainer {
 
   // Use Cases
   private _storeTemplateUseCase!: StoreTemplateUseCase;
+  private _updateTemplateUseCase!: UpdateTemplateUseCase;
   private _disableTemplateUseCase!: DisableTemplateUseCase;
   private _findTemplatesPaginatedUseCase!: FindTemplatesPaginatedUseCase;
   private _findTemplateByIdentificatorUseCase!: FindTemplateByIdentificatorUseCase;
@@ -106,6 +108,11 @@ export class DIContainer {
     this._findTemplateByIdentificatorUseCase = new FindTemplateByIdentificatorUseCase(
       this._templateRepository,
     );
+
+    this._updateTemplateUseCase = new UpdateTemplateUseCase(
+      this._uploadProvider,
+      this._templateRepository,
+    );
   }
 
   // Getters for services
@@ -126,6 +133,10 @@ export class DIContainer {
   // Getters for use cases
   public get storeTemplateUseCase(): StoreTemplateUseCase {
     return this._storeTemplateUseCase;
+  }
+
+  public get updateTemplateUseCase(): UpdateTemplateUseCase {
+    return this._updateTemplateUseCase;
   }
 
   public get disableTemplateUseCase(): DisableTemplateUseCase {

@@ -1,8 +1,9 @@
-import { FilterQuery, Model } from "mongoose";
+import { FilterQuery, Model, UpdateQuery } from "mongoose";
 import { TemplateEntity } from "../../domain/entities/template.entity";
 import { MongoTemplateInterface } from "../entities/template.interface";
 import { TemplateRepository } from "../../domain/repositories/template.repository";
 import { ResponseStatus } from "src/core/shared/domain/entities/response-status.model";
+import { PrimitiveTemplate } from "../../domain/entities/template.interface";
 
 export class MongoTemplateRepository implements TemplateRepository {
   private readonly _model: Model<MongoTemplateInterface>;
@@ -91,6 +92,36 @@ export class MongoTemplateRepository implements TemplateRepository {
     } catch (error) {
       console.log(`[ERROR][MONGO][TEMPLATE][FIND_PAGINATED] ${JSON.stringify(error)}`);
       return { count: 0, records: [] };
+    }
+  }
+
+  public async update(
+    identificator: string,
+    template: Partial<PrimitiveTemplate>,
+  ): Promise<boolean> {
+    try {
+      const properties: UpdateQuery<MongoTemplateInterface> = {};
+
+      if (template?.fields) properties.fields = template.fields;
+      if (template?.sender) properties.sender = template.sender;
+      if (template?.subject) properties.subject = template.subject;
+      if (template?.templateId) properties.templateId = template.templateId;
+      if (template?.description) properties.description = template.description;
+
+      const wasUpdated = await this._model.findOneAndUpdate(
+        {
+          identificator: identificator,
+        },
+        properties,
+        {
+          new: true,
+        },
+      );
+
+      return wasUpdated ? true : false;
+    } catch (error) {
+      console.log(`[ERROR][MONGO][TEMPLATE][UPDATE] ${JSON.stringify(error)}`);
+      return false;
     }
   }
 
