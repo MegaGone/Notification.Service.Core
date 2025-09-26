@@ -2,7 +2,7 @@ import { Router } from "express";
 import { DIContainer } from "src/framework/dependency-inyection";
 import { validateFields } from "src/framework/server/middlewares";
 import { NotificationController } from "./notification.controller";
-import { SendNotificationDto } from "./validators/send-notification.dto";
+import { SendEmailNotificationDto } from "./validators/send-notification.dto";
 import { AuthorizationMiddleware } from "src/framework/server/middlewares/authorization.middleware";
 
 export class NotificationRouter {
@@ -12,13 +12,15 @@ export class NotificationRouter {
 
     router.use(AuthorizationMiddleware.validate);
 
-    const notificationController = new NotificationController(container.sendNotificationUseCase);
+    const notificationController = new NotificationController(
+      container.sendEmailNotificationUseCase,
+    );
 
     router.post(
       "/sendEmail",
-      SendNotificationDto(),
+      SendEmailNotificationDto(),
       validateFields,
-      notificationController.sendNotification,
+      notificationController.sendEmailNotification,
     );
 
     return router;

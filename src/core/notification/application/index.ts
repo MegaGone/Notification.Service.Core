@@ -1,2 +1,2 @@
-export * from "./send-notification-orchestrator";
+export * from "./send-email-orchestrator";
 export * from "./store-notification-log";

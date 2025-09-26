@@ -14,7 +14,7 @@ import { StoreTemplateUseCase } from "../../core/template/application/store-temp
 import { FindTemplateByIdentificatorUseCase } from "src/core/template/application/find-template-by-identificator";
 import { DisableTemplateUseCase } from "../../core/template/application/disable-template/disable-template.use-case";
 
-import { SendNotificationOrchestrator } from "src/core/notification/application/send-notification-orchestrator";
+import { SendEmailOrchestrator } from "src/core/notification/application/send-email-orchestrator";
 import { StoreNotificationLogUseCase } from "../../core/notification/application/store-notification-log/store-notification-log.use-case";
 
 // PROVIDERS
@@ -56,7 +56,7 @@ export class DIContainer {
   private _findTemplatesPaginatedUseCase!: FindTemplatesPaginatedUseCase;
   private _findTemplateByIdentificatorUseCase!: FindTemplateByIdentificatorUseCase;
 
-  private _sendNotificationUseCase!: SendNotificationOrchestrator;
+  private _sendEmailNotificationUseCase!: SendEmailOrchestrator;
   private _storeNotificationLogUseCase!: StoreNotificationLogUseCase;
 
   private constructor() {
@@ -134,7 +134,7 @@ export class DIContainer {
       this._notificationRepository,
     );
 
-    this._sendNotificationUseCase = new SendNotificationOrchestrator(
+    this._sendEmailNotificationUseCase = new SendEmailOrchestrator(
       this._smtpProvider,
       this._uploadProvider,
       this._templateRepository,
@@ -190,7 +190,7 @@ export class DIContainer {
     return this._storeNotificationLogUseCase;
   }
 
-  public get sendNotificationUseCase(): SendNotificationOrchestrator {
-    return this._sendNotificationUseCase;
+  public get sendEmailNotificationUseCase(): SendEmailOrchestrator {
+    return this._sendEmailNotificationUseCase;
   }
 }

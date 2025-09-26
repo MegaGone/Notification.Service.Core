@@ -1,7 +1,7 @@
 import { SmtpProvider } from "../../domain/providers/smtp.provider";
 import { StoreNotificationLogUseCase } from "../store-notification-log";
 import { UploadProvider } from "src/core/template/domain/providers/upload.provider";
-import { SendNotificationOrchestratorDto } from "./send-notification-orchestrator.dto";
+import { SendNotificationOrchestratorDto } from "./send-email-orchestrator.dto";
 import { NOTIFICATION_STATE_ENUM } from "../../domain/constants/notification-state.enum";
 import { FieldsNotValidException } from "../../domain/exceptions/fields-not-valid.exception";
 import { TemplateRepository } from "src/core/template/domain/repositories/template.repository";
@@ -10,7 +10,7 @@ import { ContentFieldReplacerMapper } from "../../domain/mappers/content-field-r
 import { TemplateNotFoundException } from "src/core/template/domain/exceptions/template-not-found.exception";
 import { TemplateAlreadyDisabledException } from "src/core/template/domain/exceptions/template-disabled.exception";
 
-export class SendNotificationOrchestrator {
+export class SendEmailOrchestrator {
   constructor(
     private readonly _smtpProvider: SmtpProvider,
     private readonly _uploadProvider: UploadProvider,

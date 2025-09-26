@@ -4,7 +4,7 @@ import {
   genericStringArrayRule,
 } from "src/core/shared/infrastructure/validators/generic-rules.validators";
 
-export const SendNotificationDto = () => {
+export const SendEmailNotificationDto = () => {
   return [
     genericStringRule(
       "templateID",
