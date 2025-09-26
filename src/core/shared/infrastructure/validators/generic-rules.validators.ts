@@ -137,3 +137,31 @@ export const genericFileRule = (
 
   return fileRule;
 };
+
+export const genericDictionaryRule = (
+  field: string | string[],
+  message: FieldValidationMessage,
+  allowedValueTypes: Array<"string" | "number" | "boolean"> = ["string", "number", "boolean"],
+  required: boolean = true,
+) => {
+  const dictionaryRule = check(field, message);
+
+  required ? dictionaryRule.exists() : dictionaryRule.optional();
+
+  dictionaryRule.custom((value: unknown) => {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+
+    for (const [key, val] of Object.entries(value)) {
+      if (typeof key !== "string") return false;
+
+      const valueType = typeof val;
+      if (!allowedValueTypes.includes(valueType as "string" | "number" | "boolean")) return false;
+
+      if (valueType === "number" && isNaN(val as number)) return false;
+    }
+
+    return true;
+  });
+
+  return dictionaryRule;
+};

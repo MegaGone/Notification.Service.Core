@@ -1,0 +1,6 @@
+export enum NOTIFICATION_STATE_ENUM {
+  SENT = 1,
+  PENDING = 0,
+  CORE_FAILURE = 2,
+  PROVIDER_FAILURE = 3,
+}

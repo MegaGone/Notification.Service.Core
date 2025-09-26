@@ -14,14 +14,22 @@ import { StoreTemplateUseCase } from "../../core/template/application/store-temp
 import { FindTemplateByIdentificatorUseCase } from "src/core/template/application/find-template-by-identificator";
 import { DisableTemplateUseCase } from "../../core/template/application/disable-template/disable-template.use-case";
 
+import { SendNotificationOrchestrator } from "src/core/notification/application/send-notification-orchestrator";
+import { StoreNotificationLogUseCase } from "../../core/notification/application/store-notification-log/store-notification-log.use-case";
+
 // PROVIDERS
+import { SmtpProvider } from "src/core/notification/domain/providers/smtp.provider";
 import { UploadProvider } from "../../core/template/domain/providers/upload.provider";
+import { ResendSmtpProvider } from "../../core/notification/infrastructure/providers/resend-smtp.provider";
 import { CloudinaryUploadProvider } from "../../core/template/infrastructure/providers/cloudinary-upload.provider";
 
 // REPOSITORIES
 import { TemplateRepository } from "../../core/template/domain/repositories/template.repository";
 import { MongoTemplateEntity } from "../../core/template/infrastructure/entities/template.mongo-entity";
+import { NotificationRepository } from "src/core/notification/domain/repositories/notification.repository";
 import { MongoTemplateRepository } from "../../core/template/infrastructure/repositories/mongo-template.repository";
+import { MongoNotificationEntity } from "../../core/notification/infrastructure/entities/notification.mongo-entity";
+import { MongoNotificationRepository } from "../../core/notification/infrastructure/repositories/mongo-notification.repository";
 
 export class DIContainer {
   private static _instance: DIContainer;
@@ -34,10 +42,12 @@ export class DIContainer {
   private _fileSystemService!: FileSystemService;
 
   // Providers
+  private _smtpProvider!: SmtpProvider;
   private _uploadProvider!: UploadProvider;
 
   // Repositories
   private _templateRepository!: TemplateRepository;
+  private _notificationRepository!: NotificationRepository;
 
   // Use Cases
   private _storeTemplateUseCase!: StoreTemplateUseCase;
@@ -45,6 +55,9 @@ export class DIContainer {
   private _disableTemplateUseCase!: DisableTemplateUseCase;
   private _findTemplatesPaginatedUseCase!: FindTemplatesPaginatedUseCase;
   private _findTemplateByIdentificatorUseCase!: FindTemplateByIdentificatorUseCase;
+
+  private _sendNotificationUseCase!: SendNotificationOrchestrator;
+  private _storeNotificationLogUseCase!: StoreNotificationLogUseCase;
 
   private constructor() {
     this.initLogger();
@@ -84,10 +97,12 @@ export class DIContainer {
 
   private initProviders(): void {
     this._uploadProvider = new CloudinaryUploadProvider(this._fileSystemService);
+    this._smtpProvider = new ResendSmtpProvider();
   }
 
   private initRepositories(): void {
     this._templateRepository = new MongoTemplateRepository(MongoTemplateEntity);
+    this._notificationRepository = new MongoNotificationRepository(MongoNotificationEntity);
   }
 
   private initUseCases(): void {
@@ -113,6 +128,18 @@ export class DIContainer {
       this._uploadProvider,
       this._templateRepository,
     );
+
+    // NOTIFICATION
+    this._storeNotificationLogUseCase = new StoreNotificationLogUseCase(
+      this._notificationRepository,
+    );
+
+    this._sendNotificationUseCase = new SendNotificationOrchestrator(
+      this._smtpProvider,
+      this._uploadProvider,
+      this._templateRepository,
+      this._storeNotificationLogUseCase,
+    );
   }
 
   // Getters for services
@@ -121,6 +148,10 @@ export class DIContainer {
   }
 
   // Getters for providers
+  public get smtpProvider(): SmtpProvider {
+    return this._smtpProvider;
+  }
+
   public get uploadProvider(): UploadProvider {
     return this._uploadProvider;
   }
@@ -128,6 +159,10 @@ export class DIContainer {
   // Getters for repositories
   public get templateRepository(): TemplateRepository {
     return this._templateRepository;
+  }
+
+  public get notificationRepository(): NotificationRepository {
+    return this._notificationRepository;
   }
 
   // Getters for use cases
@@ -149,5 +184,13 @@ export class DIContainer {
 
   public get findTemplateByIdentificatorUseCase(): FindTemplateByIdentificatorUseCase {
     return this._findTemplateByIdentificatorUseCase;
+  }
+
+  public get storeNotificationLogUseCase(): StoreNotificationLogUseCase {
+    return this._storeNotificationLogUseCase;
+  }
+
+  public get sendNotificationUseCase(): SendNotificationOrchestrator {
+    return this._sendNotificationUseCase;
   }
 }

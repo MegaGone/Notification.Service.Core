@@ -14,14 +14,7 @@ export class MongoTemplateRepository implements TemplateRepository {
 
   public async store(template: TemplateEntity): Promise<TemplateEntity> {
     try {
-      const record = await this._model.create({
-        sender: template?.toPrimitive()?.sender,
-        fields: template?.toPrimitive()?.fields,
-        subject: template?.toPrimitive()?.subject,
-        templateId: template?.toPrimitive()?.templateId,
-        description: template?.toPrimitive()?.description,
-        identificator: template?.toPrimitive()?.identificator,
-      });
+      const record = await this._model.create({ ...template.toPrimitive() });
 
       return this._toDomain(record);
     } catch (error) {

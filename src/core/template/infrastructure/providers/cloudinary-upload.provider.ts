@@ -6,9 +6,10 @@ import {
   CLOUDINARY_OUTPUT_DIRECTORY,
 } from "src/configuration/cloudinary.configuration";
 import { UploadProvider } from "../../domain/providers/upload.provider";
+import { MULTER_DIRECTORY } from "src/configuration/multer.configuration";
 import { ConfigOptions, UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { FileSystemService } from "../../../shared/infrastructure/services/file-system.service";
-import { MULTER_DIRECTORY } from "src/configuration/multer.configuration";
+import { NOTIFICATION_STATE_ENUM } from "src/core/notification/domain/constants/notification-state.enum";
 
 export class CloudinaryUploadProvider implements UploadProvider {
   private readonly _client: typeof cloudinary;
@@ -71,6 +72,31 @@ export class CloudinaryUploadProvider implements UploadProvider {
     } catch (error) {
       console.log(`[ERROR][SERVICE][CLOUDINARY][DELETE_BY_ID] ${JSON.stringify(error)}`);
       return false;
+    }
+  }
+
+  public async getContentById(publicId: string): Promise<{ content: string; exception?: string }> {
+    try {
+      const remoteFile = this._client.url(publicId, {
+        secure: true,
+        resource_type: this._resourceType,
+      });
+
+      const response = await fetch(remoteFile);
+      if (!response.ok)
+        return {
+          content: "",
+          exception: `[CLOUDINARY] File not found ${publicId}`,
+        };
+
+      const content = await response.text();
+      return { content };
+    } catch (error) {
+      console.log(`[ERROR][SERVICE][CLOUDINARY][GET_CONTENT_BY_ID] ${JSON.stringify(error)}`);
+      return {
+        content: "",
+        exception: `[CLOUDINARY] ${JSON.stringify(error)}`,
+      };
     }
   }
 
