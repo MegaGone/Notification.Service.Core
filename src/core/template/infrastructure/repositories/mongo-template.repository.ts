@@ -121,6 +121,7 @@ export class MongoTemplateRepository implements TemplateRepository {
   private _toDomain(template: MongoTemplateInterface): TemplateEntity {
     return TemplateEntity.create({
       id: template?.id,
+      type: template?.type,
       sender: template?.sender,
       fields: template?.fields,
       subject: template?.subject,

@@ -2,6 +2,7 @@ import {
   genericFileRule,
   genericStringRule,
   genericStringArrayRule,
+  genericIntegerRule,
 } from "src/core/shared/infrastructure/validators/generic-rules.validators";
 
 export const StoreTemplateDto = () => {
@@ -23,6 +24,15 @@ export const StoreTemplateDto = () => {
         warnings: "This field doesn't exist, is not an array or is empty.",
       },
       null,
+    ),
+    genericIntegerRule(
+      "type",
+      {
+        location: "body",
+        requiredType: "number",
+        warnings: "This field doesn't exist, is not a number or is empty.",
+      },
+      {},
     ),
     genericFileRule(
       "template",

@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import { TEMPLATE_TYPE_ENUM } from "../../domain/constants";
 
 export interface MongoTemplateInterface extends Document {
   id?: string;
@@ -11,4 +12,5 @@ export interface MongoTemplateInterface extends Document {
   description: string;
   fields: Array<string>;
   identificator: string;
+  type: TEMPLATE_TYPE_ENUM;
 }

@@ -19,10 +19,11 @@ export class TemplateController {
 
   public storeTemplate = (req: Request, res: Response) => {
     const { file } = req;
-    const { sender, subject, description, fields } = req.body;
+    const { sender, subject, description, fields, type } = req.body;
 
     this._storeTemplateUseCase
       .execute({
+        type,
         sender,
         fields,
         subject,

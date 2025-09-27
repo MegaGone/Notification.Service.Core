@@ -6,6 +6,7 @@ export class TemplateEntity {
   public static create(attributes: PrimitiveTemplate): TemplateEntity {
     return new TemplateEntity({
       id: attributes?.id,
+      type: attributes?.type,
       sender: attributes?.sender,
       fields: attributes?.fields,
       subject: attributes?.subject,
@@ -21,6 +22,7 @@ export class TemplateEntity {
   public toPrimitive(): PrimitiveTemplate {
     return {
       id: this._attributes?.id,
+      type: this._attributes?.type,
       sender: this._attributes?.sender,
       fields: this._attributes?.fields,
       enabled: this._attributes.enabled,

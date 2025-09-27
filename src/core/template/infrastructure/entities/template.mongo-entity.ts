@@ -4,6 +4,7 @@ import { MongoTemplateInterface } from "./template.interface";
 
 const MongoTemplateSchema: Schema = new Schema(
   {
+    type: { type: Number, required: true },
     sender: { type: String, required: true },
     enabled: { type: Boolean, default: true },
     subject: { type: String, required: true },
