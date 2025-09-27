@@ -19,13 +19,13 @@ export class StoreTemplateUseCase {
     const wasDuplicated = await this._templateRepository.findByDescription(dto.description);
     if (wasDuplicated) throw new TemplateDuplicatedException();
 
-    const templateId = await this._uploadProvider.upload(dto.filename);
-    if (!templateId) throw new UploadFileException();
+    const { success, publicId } = await this._uploadProvider.upload(dto.filename);
+    if (!success || !publicId) throw new UploadFileException();
 
     const template = await this._templateRepository.store(
       TemplateEntity.create({
         ...dto,
-        templateId,
+        templateId: publicId,
       }),
     );
 

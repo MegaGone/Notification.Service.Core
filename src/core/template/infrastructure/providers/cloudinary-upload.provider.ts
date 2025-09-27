@@ -9,7 +9,7 @@ import { UploadProvider } from "../../domain/providers/upload.provider";
 import { MULTER_DIRECTORY } from "src/configuration/multer.configuration";
 import { ConfigOptions, UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { FileSystemService } from "../../../shared/infrastructure/services/file-system.service";
-import { NOTIFICATION_STATE_ENUM } from "src/core/notification/domain/constants/notification-state.enum";
+import { UploadResult, ContentResult } from "../../domain/providers/upload-response.interface";
 
 export class CloudinaryUploadProvider implements UploadProvider {
   private readonly _client: typeof cloudinary;
@@ -32,16 +32,22 @@ export class CloudinaryUploadProvider implements UploadProvider {
     } as ConfigOptions);
   }
 
-  public async upload(path: string): Promise<string> {
+  public async upload(path: string): Promise<UploadResult> {
     try {
       const temporalPath = this._fileSystemService.resolvePath(MULTER_DIRECTORY + "/" + path);
       const uploadResult = await this._uploadFileToCloudinary(temporalPath);
       await this._fileSystemService.deleteFile(temporalPath);
 
-      return uploadResult.public_id;
+      return {
+        success: true,
+        publicId: uploadResult.public_id,
+      };
     } catch (error) {
       console.log(`[ERROR][SERVICE][CLOUDINARY][UPLOAD] ${JSON.stringify(error)}`);
-      return "";
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Upload failed",
+      };
     }
   }
 
@@ -75,7 +81,7 @@ export class CloudinaryUploadProvider implements UploadProvider {
     }
   }
 
-  public async getContentById(publicId: string): Promise<{ content: string; exception?: string }> {
+  public async getContentById(publicId: string): Promise<ContentResult> {
     try {
       const remoteFile = this._client.url(publicId, {
         secure: true,
@@ -83,19 +89,23 @@ export class CloudinaryUploadProvider implements UploadProvider {
       });
 
       const response = await fetch(remoteFile);
-      if (!response.ok)
+      if (!response.ok) {
         return {
-          content: "",
-          exception: `[CLOUDINARY] File not found ${publicId}`,
+          success: false,
+          error: `[CLOUDINARY] File not found: ${publicId}`,
         };
+      }
 
       const content = await response.text();
-      return { content };
+      return {
+        success: true,
+        content,
+      };
     } catch (error) {
       console.log(`[ERROR][SERVICE][CLOUDINARY][GET_CONTENT_BY_ID] ${JSON.stringify(error)}`);
       return {
-        content: "",
-        exception: `[CLOUDINARY] ${JSON.stringify(error)}`,
+        success: false,
+        error: `[CLOUDINARY] ${JSON.stringify(error)}`,
       };
     }
   }

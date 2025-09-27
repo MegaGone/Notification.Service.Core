@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { SmtpProvider } from "../../domain/providers/smtp.provider";
 import { RESEND_API_KEY } from "src/configuration/resend.configuration";
+import { SmtpResponse } from "../../domain/providers/smtp-response.interface";
 import { NOTIFICATION_STATE_ENUM } from "../../domain/constants/notification-state.enum";
 
 export class ResendSmtpProvider implements SmtpProvider {
@@ -15,7 +16,7 @@ export class ResendSmtpProvider implements SmtpProvider {
     subject: string,
     recipients: string | Array<string>,
     template: string,
-  ): Promise<Partial<{ status: number; response: string; responseException: string }>> {
+  ): Promise<SmtpResponse> {
     try {
       const { data, error } = await this._client.emails.send({
         from: sender,

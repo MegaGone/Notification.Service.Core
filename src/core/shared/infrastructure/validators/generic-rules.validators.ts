@@ -151,13 +151,31 @@ export const genericDictionaryRule = (
   dictionaryRule.custom((value: unknown) => {
     if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
 
-    for (const [key, val] of Object.entries(value)) {
-      if (typeof key !== "string") return false;
+    const entries = Object.entries(value);
+
+    if (entries.length === 0) return false;
+
+    for (const [key, val] of entries) {
+      if (typeof key !== "string" || key.trim() === "") return false;
+
+      if (val === null || val === undefined) return false;
 
       const valueType = typeof val;
+
       if (!allowedValueTypes.includes(valueType as "string" | "number" | "boolean")) return false;
 
-      if (valueType === "number" && isNaN(val as number)) return false;
+      switch (valueType) {
+        case "string":
+          if ((val as string).trim() === "") return false;
+          break;
+
+        case "number":
+          if (isNaN(val as number) || !isFinite(val as number)) return false;
+          break;
+
+        case "boolean":
+          break;
+      }
     }
 
     return true;

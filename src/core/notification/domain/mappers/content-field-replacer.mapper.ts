@@ -1,5 +1,11 @@
+interface ContentProcessingResult {
+  error?: string;
+  success: boolean;
+  content?: string;
+}
+
 export class ContentFieldReplacerMapper {
-  public static replace(content: string, fields: Record<string, unknown>): string {
+  public static replace(content: string, fields: Record<string, unknown>): ContentProcessingResult {
     try {
       let processedContent = content;
 
@@ -21,10 +27,16 @@ export class ContentFieldReplacerMapper {
         return fields[trimmedField]?.toString() || match;
       });
 
-      return processedContent;
+      return {
+        success: true,
+        content: processedContent,
+      };
     } catch (error) {
       console.log(`[ERROR][MAPPER][CONTENT_FIELD_REPLACER][REPLACE] ${JSON.stringify(error)}`);
-      return "";
+      return {
+        success: false,
+        error: `[CONTENT_FIELD_REPLACER] ${JSON.stringify(error)}`,
+      };
     }
   }
 }

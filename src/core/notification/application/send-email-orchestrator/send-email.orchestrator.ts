@@ -1,7 +1,10 @@
+import {
+  SendNotificationOrchestratorDto,
+  SendNotificationOrchestratorResponseDto,
+} from "./send-email-orchestrator.dto";
 import { SmtpProvider } from "../../domain/providers/smtp.provider";
 import { StoreNotificationLogUseCase } from "../store-notification-log";
 import { UploadProvider } from "src/core/template/domain/providers/upload.provider";
-import { SendNotificationOrchestratorDto } from "./send-email-orchestrator.dto";
 import { NOTIFICATION_STATE_ENUM } from "../../domain/constants/notification-state.enum";
 import { FieldsNotValidException } from "../../domain/exceptions/fields-not-valid.exception";
 import { TemplateRepository } from "src/core/template/domain/repositories/template.repository";
@@ -18,7 +21,9 @@ export class SendEmailOrchestrator {
     private readonly _storeNotificationLogUseCase: StoreNotificationLogUseCase,
   ) {}
 
-  public async execute(dto: SendNotificationOrchestratorDto): Promise<void> {
+  public async execute(
+    dto: SendNotificationOrchestratorDto,
+  ): Promise<SendNotificationOrchestratorResponseDto> {
     const template = await this._templateRepository.findByIdentificator(dto.templateID);
     if (!template) throw new TemplateNotFoundException(dto.templateID);
 
@@ -27,30 +32,42 @@ export class SendEmailOrchestrator {
     const { enabled, templateId, fields, sender, subject } = template.toPrimitive();
     if (!enabled) throw new TemplateAlreadyDisabledException();
 
-    const { content, exception } = await this._uploadProvider.getContentById(templateId);
-    if (exception || !content) {
-      return await this._storeNotificationLog({
+    const contentResult = await this._uploadProvider.getContentById(templateId);
+    if (!contentResult.success || !contentResult.content) {
+      await this._storeNotificationLog({
         response: "",
         templateID: dto.templateID,
         recipients: dto.recipients,
-        responseException: exception,
+        responseException: contentResult.error,
         status: NOTIFICATION_STATE_ENUM.PROVIDER_FAILURE,
       });
+
+      return new SendNotificationOrchestratorResponseDto(false);
     }
 
     if (!this._areValidFields(fields, dto.fields)) throw new FieldsNotValidException();
 
-    const processedContent = ContentFieldReplacerMapper.replace(content, dto.fields);
-    if (!processedContent) notificationStatus = NOTIFICATION_STATE_ENUM.CORE_FAILURE;
+    const processingResult = ContentFieldReplacerMapper.replace(contentResult.content, dto.fields);
+    if (!processingResult.success || !processingResult.content) {
+      await this._storeNotificationLog({
+        response: "",
+        templateID: dto.templateID,
+        recipients: dto.recipients,
+        responseException: `[CORE] Template processing failed: ${processingResult.error}`,
+        status: NOTIFICATION_STATE_ENUM.CORE_FAILURE,
+      });
+
+      return new SendNotificationOrchestratorResponseDto(false);
+    }
 
     const { status, response, responseException } = await this._smtpProvider.SendEmailWithTemplate(
       sender,
       subject,
       dto.recipients,
-      processedContent,
+      processingResult.content,
     );
 
-    notificationStatus = status!;
+    notificationStatus = status;
 
     await this._storeNotificationLog({
       response: response,
@@ -59,6 +76,10 @@ export class SendEmailOrchestrator {
       recipients: dto.recipients,
       responseException: responseException,
     });
+
+    return new SendNotificationOrchestratorResponseDto(
+      notificationStatus === NOTIFICATION_STATE_ENUM.SENT,
+    );
   }
 
   private _areValidFields(fields: Array<string>, dtoFields: Record<string, unknown>): boolean {

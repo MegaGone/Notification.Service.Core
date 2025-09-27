@@ -63,11 +63,11 @@ export class UpdateTemplateUseCase {
   ): Promise<{ newTemplateId?: string; oldFileToDelete?: string }> {
     if (!dto.filename) return {};
 
-    const newTemplateId = await this._uploadService.upload(dto.filename);
-    if (!newTemplateId) throw new UploadFileException();
+    const { success, publicId } = await this._uploadService.upload(dto.filename);
+    if (!success || !publicId) throw new UploadFileException();
 
     return {
-      newTemplateId,
+      newTemplateId: publicId,
       oldFileToDelete: currentTemplate.templateId,
     };
   }
