@@ -14,7 +14,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "nodenext",
-    "forceConsistentCasingInFileNames": true
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"]
   },
   "paths": {
     "@/*": ["*"],

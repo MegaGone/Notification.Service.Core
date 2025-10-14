@@ -101,7 +101,7 @@ export const genericStringArrayRule = (
 
   required ? arrayRule.exists({ checkNull: true, checkFalsy: true }) : arrayRule.optional();
 
-  arrayRule.custom((value: any) => {
+  arrayRule.custom((value: unknown) => {
     if (!Array.isArray(value)) return false;
 
     for (const element of value) {
