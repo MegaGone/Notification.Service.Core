@@ -1,0 +1,9 @@
+/dist
+/node_modules
+/ci
+/templates
+
+/.vs
+/vs
+/vscode
+/.vscode

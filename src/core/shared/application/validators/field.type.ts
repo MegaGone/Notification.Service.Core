@@ -9,4 +9,4 @@ type FieldValidationMessage = {
   requiredType: string;
 };
 
-export { FieldValidationMessage, FieldValidationError };
+export type { FieldValidationMessage, FieldValidationError };
