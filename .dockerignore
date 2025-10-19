@@ -1,9 +1,51 @@
-/dist
+# Dependencies
 /node_modules
-/ci
-/templates
+.pnpm-store
 
+# Build output
+/dist
+
+# IDE
 /.vs
 /vs
 /vscode
 /.vscode
+.idea
+
+# Tests
+/tests
+/coverage
+*.test.ts
+*.spec.ts
+
+# CI/CD
+/.github
+/ci
+
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.*
+!.env.example
+env.example
+
+# Documentation
+*.md
+!README.md
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Other
+.DS_Store
+Thumbs.db
