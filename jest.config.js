@@ -1,0 +1,30 @@
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  roots: ["<rootDir>/src", "<rootDir>/tests"],
+  testMatch: ["**/__tests__/**/*.ts", "**/?(*.)+(spec|test).ts"],
+  transform: {
+    "^.+\\.ts$": "ts-jest",
+  },
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.d.ts",
+    "!src/**/*.interface.ts",
+    "!src/index.ts",
+    "!src/framework/server/**/*",
+    "!src/configuration/**/*",
+  ],
+  coverageDirectory: "coverage",
+  coverageReporters: ["text", "lcov", "html"],
+  moduleNameMapper: {
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@domain/(.*)$": "<rootDir>/src/$1/domain/$1",
+    "^@application/(.*)$": "<rootDir>/src/$1/application/$1",
+    "^@presentation/*": "<rootDir>/src/$1/presentation/$1",
+    "^@infrastructure/(.*)$": "<rootDir>/src/$1/infarstructure/$1",
+  },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testTimeout: 30000,
+  verbose: true,
+};
