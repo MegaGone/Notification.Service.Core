@@ -107,7 +107,7 @@ A robust and scalable notification service API built with Clean Architecture pri
 Once the server is running, access the interactive API documentation at:
 
 ```
-http://localhost:3000/api/v1/docs
+http://localhost:3000/api/docs
 ```
 
 ### Core Endpoints

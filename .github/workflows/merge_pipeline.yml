@@ -1,0 +1,118 @@
+name: Merge Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Get pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test:ci
+
+      - name: Run build
+        run: pnpm build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+      - name: Send email notification (failure)
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Pipeline failed in ${context.repo.repo} - ${new Date().toISOString()}
+          to: ${{ secrets.EMAIL_TO }}
+          from: GitHub Actions CI
+          body: |
+            The pipeline failed in the ${context.repo.repo} repository.
+
+            Repository: ${{ github.repository }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Commit message: ${{ github.event.head_commit.message }}
+
+            Review details at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Send email notification (success)
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Pipeline successful in ${{ github.repository }} - ${new Date().toISOString()}
+          to: ${{ secrets.EMAIL_TO }}
+          from: GitHub Actions CI
+          body: |
+            The pipeline completed successfully in the ${context.repo.repo} repository.
+
+            Repository: ${{ github.repository }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Commit message: ${{ github.event.head_commit.message }}
+
+            Build artifacts are available at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Create issue if the pipeline fails
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Pipeline failed in ${context.repo.repo} - ${new Date().toISOString()}`,
+              body: `## The CI pipeline failed in the ${context.repo.repo} repository
+              
+              **Failure details:**
+              - **Commit:** ${context.sha}
+              - **Author:** @${context.actor}
+              - **Commit message:** ${context.payload.head_commit.message}
+              - **Workflow run:** [Ver detalles](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              
+              **Date:** ${new Date().toISOString()}
+              
+              ---
+              
+              Please review the workflow logs to identify the cause of the failure and fix the issue.
+              `,
+              labels: ['ci-failure', 'bug', 'automated']
+            });
+
+            console.log(`Issue created: ${issue.data.html_url}`);
