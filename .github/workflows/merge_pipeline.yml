@@ -55,16 +55,17 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Pipeline failed in ${context.repo.repo} - ${new Date().toISOString()}
+          subject: "Pipeline failed in ${{ github.repository }} - ${{ github.event.head_commit.timestamp }}"
           to: ${{ secrets.EMAIL_TO }}
           from: GitHub Actions CI
           body: |
-            The pipeline failed in the ${context.repo.repo} repository.
+            The pipeline has failed on the master branch.
 
             Repository: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Author: ${{ github.actor }}
             Commit message: ${{ github.event.head_commit.message }}
+            Date: ${{ github.event.head_commit.timestamp }}
 
             Review details at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -76,16 +77,17 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Pipeline successful in ${{ github.repository }} - ${new Date().toISOString()}
+          subject: "Pipeline successful in ${{ github.repository }} - ${{ github.event.head_commit.timestamp }}"
           to: ${{ secrets.EMAIL_TO }}
           from: GitHub Actions CI
           body: |
-            The pipeline completed successfully in the ${context.repo.repo} repository.
+            The pipeline completed successfully on the master branch.
 
             Repository: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Author: ${{ github.actor }}
             Commit message: ${{ github.event.head_commit.message }}
+            Date: ${{ github.event.head_commit.timestamp }}
 
             Build artifacts are available at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -97,22 +99,21 @@ jobs:
             const issue = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `Pipeline failed in ${context.repo.repo} - ${new Date().toISOString()}`,
-              body: `## The CI pipeline failed in the ${context.repo.repo} repository
+              title: `Pipeline failed on master - ${context.sha.substring(0, 7)}`,
+              body: `## The CI pipeline failed on the master branch
               
               **Failure details:**
               - **Commit:** ${context.sha}
               - **Author:** @${context.actor}
               - **Commit message:** ${context.payload.head_commit.message}
-              - **Workflow run:** [Ver detalles](${context.payload.repository.html_url}/actions/runs/${context.runId})
-              
-              **Date:** ${new Date().toISOString()}
+              - **Workflow run:** [View details](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              - **Date:** ${new Date().toISOString()}
               
               ---
               
-              Please review the workflow logs to identify the cause of the failure and fix the issue.
+              Please review the workflow logs to identify the cause of the failure.
               `,
-              labels: ['ci-failure', 'bug', 'automated']
+              labels: ['ci-failure', 'bug', 'automated', 'merge-pipeline']
             });
 
             console.log(`Issue created: ${issue.data.html_url}`);
